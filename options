@@ -1,0 +1,17 @@
+set -o vi
+set -o ignoreeof
+set -o histexpand
+set +o noclobber
+
+shopt -s autocd
+shopt -s cdspell
+shopt -s dirspell
+shopt -s histappend
+shopt -s cmdhist
+shopt -s nullglob
+shopt -s globstar
+shopt -s nocaseglob
+shopt -s checkwinsize
+shopt -u sourcepath
+
+

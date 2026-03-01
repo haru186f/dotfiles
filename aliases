@@ -1,0 +1,17 @@
+alias ls='ls -aF --color=auto'
+alias ll='ls -alF --color=auto'
+alias ld='ls -dlF --color=auto'
+alias li='ls -aliF --color=auto'
+
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+alias mkdir='mkdir -p'
+alias grep='grep -E --color=auto'
+alias date='env LANG=ja_JP.utf8 date'
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias tree='tree -C -I "migrations|venv|.git|.vscode|__pycache__|.mypy_cache|.pytest_cache|.env*|.gitignore"'

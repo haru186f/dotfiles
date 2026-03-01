@@ -1,0 +1,3 @@
+# .inputrc
+
+"\C-l": clear-screen

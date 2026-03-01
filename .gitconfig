@@ -1,0 +1,38 @@
+[user]
+	name = Haru
+	email = 194200695+haru186f@users.noreply.github.com
+
+[core]
+    editor = vim
+    eol = lf
+    ignorecase = false
+    quotepath = false
+    autocrlf = input
+    whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
+    excludesfile = ~/.gitignore_global
+
+[color]
+    ui = auto
+    branch = auto
+    diff = auto
+    status = auto
+    interactive = auto
+
+[init]
+    defaultBranch = main
+
+[pull]
+    ff = only
+    rebase = false
+
+[push]
+    default = current
+
+[merge]
+    conflictstyle = diff3
+
+[rebase]
+    autosquash = true
+
+[fetch]
+    prune = true
