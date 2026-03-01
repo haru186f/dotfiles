@@ -1,3 +1,2 @@
-# .inputrc
-
+# Ctrl+L to clear screen
 "\C-l": clear-screen

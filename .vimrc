@@ -1,5 +1,3 @@
-# .vimrc
-
 colorscheme jellybeans
 
 set showmatch                   " 対応する括弧を表示
