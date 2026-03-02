@@ -7,6 +7,7 @@ ln -sf $DOTFILES/.bashrc $HOME/.bashrc
 ln -sf $DOTFILES/.bash_profile $HOME/.bash_profile
 ln -sf $DOTFILES/.vimrc $HOME/.vimrc
 ln -sf $DOTFILES/.inputrc $HOME/.inputrc
+ln -sf $DOTFILES/.gitconfig $HOME/.gitconfig
 
 # カラースキーム用のディレクトリを作成
 mkdir -p $HOME/.vim/colors
