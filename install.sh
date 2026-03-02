@@ -14,3 +14,6 @@ mkdir -p $HOME/.vim/colors
 # jellybeans カラースキームをダウンロード
 curl -fs -o $HOME/.vim/colors/jellybeans.vim \
 https://raw.githubusercontent.com/nanotech/jellybeans.vim/master/colors/jellybeans.vim
+
+# シェルを再起動（その場で全て反映）
+exec "$SHELL"
