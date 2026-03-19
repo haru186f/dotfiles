@@ -16,6 +16,8 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias tree='tree -C -I "migrations|venv|.git|.vscode|__pycache__|.mypy_cache|.pytest_cache|.env*|.gitignore"'
 
+alias vim='nvim'
+
 # Django
 alias activate='[ -d venv ] || python3 -m venv venv; source venv/bin/activate'
 alias run='source venv/bin/activate && python manage.py runserver'
@@ -29,3 +31,5 @@ alias freeze='python -m pip freeze > requirements.txt'
 alias runcommands='python manage.py run_all_custom_commands'
 alias setup='python manage.py migrate && python manage.py run_all_custom_commands && python manage.py createsuperuser'
 alias dcron='python manage.py crontab'
+
+alias virt-manager='LANG=ja_JP.UTF-8 virt-manager'

@@ -1,4 +1,4 @@
-set -o vi
+set -o emacs
 set -o ignoreeof
 set -o histexpand
 set +o noclobber
