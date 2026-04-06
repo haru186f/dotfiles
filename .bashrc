@@ -40,7 +40,7 @@ export LS_COLORS='rs=0:di=01;36:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;
 export PATH="$PATH:$HOME/bin"
 export LANG='en_US.UTF-8'
 export LESS='-R -X -F'
-export PS1='[\u@\h] \W\$ '
+export PS1='[\u@\h \W]\$ '
 
 export HISTTIMEFORMAT='%F %T '
 export HISTSIZE=50000
