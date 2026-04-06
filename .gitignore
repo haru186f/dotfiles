@@ -1,0 +1,87 @@
+# ==========================================
+# OS generated files
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ==========================================
+# Shell history & Cache
+# ==========================================
+.bash_history
+.zsh_history
+.zsh_sessions/
+.lesshst
+.python_history
+.node_repl_history
+.mysql_history
+.sqlite_history
+.cache/
+
+# ==========================================
+# Security & Credentials (非常に重要)
+# ==========================================
+# SSH鍵やGPG鍵
+.ssh/
+.gnupg/
+# クラウドやツールの認証情報
+.aws/
+.gcp/
+.azure/
+.kube/config
+.docker/config.json
+.netrc
+# 環境変数やAPIキーなどを含むファイル
+.env
+.env.*
+.envrc
+
+# ==========================================
+# Editor & IDE
+# ==========================================
+# Vim
+*.swp
+*.swo
+*~
+.viminfo
+.netrwhist
+
+# VS Code
+.vscode/
+
+# JetBrains
+.idea/
+
+# ==========================================
+# Language & Package Managers
+# ==========================================
+# Node.js
+node_modules/
+.npm/
+.yarn/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Ruby
+.bundle/
+
+# Rust
+.cargo/credentials
+.rustup/
+
+# ==========================================
+# Others
+# ==========================================
+# ゴミ箱や一時ファイル
+.Trash/
+tmp/
+temp/
+*.log
