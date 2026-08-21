@@ -9,11 +9,6 @@ ln -sf $DOTFILES/.vimrc $HOME/.vimrc
 ln -sf $DOTFILES/.inputrc $HOME/.inputrc
 ln -sf $DOTFILES/.gitconfig $HOME/.gitconfig
 
-# WSLの場合は、Windowsのフォルダ移動用のシンボリックリンクを作成する
-if [ echo $(uname -r) | grep -qi "WSL" ]; then
-    echo WSL!
-fi
-
 # カラースキーム用のディレクトリを作成
 mkdir -p $HOME/.vim/colors
 
