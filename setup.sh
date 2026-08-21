@@ -28,7 +28,7 @@ for file in "${FILES[@]}"; do
     fi
 
     # dotfiles側にファイルが存在すればリンク作成
-    if [[ -f "$source" ]]; me
+    if [[ -f "$source" ]]; then
         ln -sf "$source" "$target"
         echo "Linked: $source -> $target"
     else
