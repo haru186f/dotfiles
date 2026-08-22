@@ -23,19 +23,16 @@ Thumbs.db
 .cache/
 
 # ==========================================
-# Security & Credentials (非常に重要)
+# Security & Credentials
 # ==========================================
-# SSH鍵やGPG鍵
 .ssh/
 .gnupg/
-# クラウドやツールの認証情報
 .aws/
 .gcp/
 .azure/
 .kube/config
 .docker/config.json
 .netrc
-# 環境変数やAPIキーなどを含むファイル
 .env
 .env.*
 .envrc
@@ -43,44 +40,31 @@ Thumbs.db
 # ==========================================
 # Editor & IDE
 # ==========================================
-# Vim
 *.swp
 *.swo
 *~
 .viminfo
 .netrwhist
-
-# VS Code
 .vscode/
-
-# JetBrains
 .idea/
 
 # ==========================================
 # Language & Package Managers
 # ==========================================
-# Node.js
 node_modules/
 .npm/
 .yarn/
-
-# Python
 __pycache__/
 *.pyc
 .venv/
 venv/
-
-# Ruby
 .bundle/
-
-# Rust
 .cargo/credentials
 .rustup/
 
 # ==========================================
 # Others
 # ==========================================
-# ゴミ箱や一時ファイル
 .Trash/
 tmp/
 temp/

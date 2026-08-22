@@ -15,11 +15,16 @@ alias cp='cp -ir'
 alias mv='mv -i'
 alias mkdir='mkdir -p'
 alias grep='grep -E --color=auto'
+alias v='vim'
+alias vi='vim'
+alias l='less'
+alias cl='clear'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
 # Git
+alias g='git'
 alias gm='git switch main && git pull origin main'
 alias ga='git add --all'
 alias gc='git commit -m'
@@ -30,6 +35,7 @@ alias gbc='git switch -c'
 alias gsw='git switch'
 
 # Django
+alias py='python'
 alias activate='[ -d venv ] || python3 -m venv venv; source venv/bin/activate'
 alias run='source venv/bin/activate && python manage.py runserver'
 alias migrate='python manage.py makemigrations "$@" && python manage.py migrate "$@"'
@@ -56,12 +62,12 @@ export PS1='[\u@\h \W]\$ '
 export HISTTIMEFORMAT='%F %T '
 export HISTSIZE=50000
 export HISTFILESIZE=100000
-export EDITOR=emacs
-export VISUAL=emacs
+export EDITOR=vim
+export VISUAL=vim
 
-# =====================================================================
-#	Options
-# =====================================================================
+#==============================================================#
+#           Options                                            #
+#==============================================================#
 
 # set
 set -o emacs
@@ -69,6 +75,7 @@ set -o ignoreeof
 set -o histexpand
 set -o history
 
+# shopt
 shopt -s autocd
 shopt -s cdspell
 shopt -s dirspell
