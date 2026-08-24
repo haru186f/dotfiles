@@ -1,7 +1,7 @@
 # .bashrc
 
 #==============================================================#
-#           Aliases                                            #
+#           Aliases & Functions                                #
 #==============================================================#
 
 # common
@@ -33,21 +33,22 @@ alias gs='git status'
 alias gb='git branch'
 alias gbc='git switch -c'
 alias gsw='git switch'
+gra() { git remote add origin "https://github.com/haru186f/$@.git" }
 
 # Django
 alias py='python'
 alias activate='[ -d venv ] || python3 -m venv venv; source venv/bin/activate'
 alias run='source venv/bin/activate && python manage.py runserver'
-alias migrate='python manage.py makemigrations "$@" && python manage.py migrate "$@"'
 alias shell='python manage.py shell_plus 2>/dev/null || python manage.py shell'
-alias createsuperuser='python manage.py createsuperuser "$@"'
 alias startproject='django-admin startproject config .'
-alias startapp='python manage.py startapp "$@"'
 alias require='python -m pip install -r requirements.txt'
 alias freeze='python -m pip freeze > requirements.txt'
 alias runcommands='python manage.py run_all_custom_commands'
 alias setup='python manage.py migrate && python manage.py run_all_custom_commands && python manage.py createsuperuser'
 alias dcron='python manage.py crontab'
+migrate() { python manage.py makemigrations "$@" && python manage.py migrate "$@" }
+createsuperuser() { python manage.py createsuperuser "$@" }
+startapp() { python manage.py startapp "$@" }
 
 #==============================================================#
 #           Exports                                            #
