@@ -18,7 +18,6 @@ detect_os() {
 OS_TYPE=$(detect_os)
 echo "Detected OS: $OS_TYPE"
 
-
 # 管理対象ファイル一覧
 FILES=(
     ".bashrc"
