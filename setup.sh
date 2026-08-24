@@ -4,14 +4,42 @@ set -euo pipefail
 DOTFILES_DIR="$HOME/dotfiles"
 BACKUP_DIR="$HOME/dotfiles_backup"
 
+# OS判別
+detect_os() {
+    if [[ -f /etc/redhat-release ]]; then
+        echo "redhat"
+    elif [[ -f /etc/debian_version ]]; then
+        echo "debian"
+    else
+        echo "unknown"
+    fi
+}
+
+OS_TYPE=$(detect_os)
+echo "Detected OS: $OS_TYPE"
+
+
 # 管理対象ファイル一覧
 FILES=(
     ".bashrc"
-    ".bash_profile"
     ".vimrc"
     ".inputrc"
     ".gitconfig"
 )
+
+case "$OS_TYPE" in
+    redhat)
+        FILES+=(".bash_profile")
+        ;;
+    debian)
+        FILES+=(".profile")
+        ;;
+    *)
+        echo "Warning: Unknown OS. Adding both .bash_profile and .profile to check list."
+        FILES+=(".bash_profile" ".profile")
+        ;;
+esac
+
 
 # バックアップディレクトリ作成
 mkdir -p "$BACKUP_DIR"
@@ -20,6 +48,11 @@ mkdir -p "$BACKUP_DIR"
 for file in "${FILES[@]}"; do
     target="$HOME/$file"
     source="$DOTFILES_DIR/$file"
+
+    # Debianの場合は .bash_profile を .profile に変更
+    if [[ "$file" == ".bash_profile" && "$OS_TYPE" == "debian" ]]; then
+        target="$HOME/.profile"
+    fi
 
     # 既存ファイル（または既存リンク）が存在する場合はバックアップ
     if [[ -f "$target" || -L "$target" ]]; then
