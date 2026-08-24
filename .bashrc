@@ -33,7 +33,7 @@ alias gs='git status'
 alias gb='git branch'
 alias gbc='git switch -c'
 alias gsw='git switch'
-gra() { git remote add origin "https://github.com/haru186f/$@.git" }
+alias gra='git remote add origin "https://github.com/haru186f/$(basename "$PWD").git"'
 
 # Django
 alias py='python'
@@ -46,9 +46,9 @@ alias freeze='python -m pip freeze > requirements.txt'
 alias runcommands='python manage.py run_all_custom_commands'
 alias setup='python manage.py migrate && python manage.py run_all_custom_commands && python manage.py createsuperuser'
 alias dcron='python manage.py crontab'
-migrate() { python manage.py makemigrations "$@" && python manage.py migrate "$@" }
-createsuperuser() { python manage.py createsuperuser "$@" }
-startapp() { python manage.py startapp "$@" }
+migrate() { python manage.py makemigrations "$@" && python manage.py migrate "$@"; }
+createsuperuser() { python manage.py createsuperuser "$@"; }
+startapp() { python manage.py startapp "$@"; }
 
 #==============================================================#
 #           Exports                                            #
