@@ -37,7 +37,7 @@ alias gbc='git switch -c'
 alias gsw='git switch'
 alias gr='git remote -v'
 alias gra='git remote add origin "https://github.com/haru186f/$(basename "$PWD").git"'
-alias grs='git remote set-url origin "git@gitub.com:haru186f/$(basename "&PWD").git"'
+alias grs='git remote set-url origin "git@gitub.com:haru187f/$(basename "$PWD").git"'
 gacp() { git add --all && git commit -m "$*" && git push; }
 
 # Django

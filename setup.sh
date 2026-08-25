@@ -42,11 +42,14 @@ for file in "${FILES[@]}"; do
         backup="$BACKUP_DIR/.profile"
     fi
 
-    # 既存ファイル（または既存リンク）が存在する場合はバックアップ
+    # 既存ファイル（または既存リンク）が存在する、かつバックアップが存在しない場合にバック
     if [[ -f "$target" || -L "$target" ]]; then
-        cp -a "$target" "$backup"
-        echo "Backed up: $file -> $backup"
-    fi
+        if [[ ! -e "$backup" ]]; then
+            cp -a "$target" "$backup"
+            echo "Backed up: $file -> $backup"
+        else
+            echo "Backup already exists, skipped: $backup"
+        fi
 
     # dotfiles側にファイルが存在すればリンク作成
     if [[ -f "$source" ]]; then
