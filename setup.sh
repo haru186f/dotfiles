@@ -34,13 +34,12 @@ mkdir -p "$BACKUP_DIR"
 for file in "${FILES[@]}"; do
     target="$HOME/$file"
     source="$DOTFILES_DIR/$file"
+    backup="$BACKUP_DIR/$file"
 
     # Debianの場合は .bash_profile を .profile に変更
     if [[ "$file" == ".bash_profile" && "$OS_TYPE" == "Debian" ]]; then
         target="$HOME/.profile"
         backup="$BACKUP_DIR/.profile"
-    else
-        backup="$BACKUP_DIR/$file"
     fi
 
     # 既存ファイル（または既存リンク）が存在する場合はバックアップ
