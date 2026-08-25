@@ -15,7 +15,7 @@ detect_os() {
         os_name="Unknown"
     fi
 
-    if [[ -n "$WSL_DISTRO_NAME" ]]; then
+    if [[ -n "${WSL_DISTRO_NAME:-}" ]]; then
         os_name="$os_name (WSL)"
     fi
 
