@@ -37,7 +37,7 @@ alias gbc='git switch -c'
 alias gsw='git switch'
 alias gr='git remote -v'
 alias gra='git remote add origin "https://github.com/haru186f/$(basename "$PWD").git"'
-alias grs='git remote set-url origin "git@gitub.com:haru187f/$(basename "$PWD").git"'
+alias grs='git remote set-url origin "git@gitub.com:haru186f/$(basename "$PWD").git"'
 gacp() { git add --all && git commit -m "$*" && git push; }
 
 # Django
@@ -64,7 +64,7 @@ export LS_COLORS='rs=0:di=01;36:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;
 export PATH="$PATH:$HOME/bin"
 export LANG='en_US.UTF-8'
 export LESS='-R -X -F'
-export PS1='[\u@\h \W]\$ '
+export PS1='[\u@\h \w]\$ '
 export HISTTIMEFORMAT='%F %T '
 export HISTSIZE=50000
 export HISTFILESIZE=100000

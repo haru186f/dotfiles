@@ -50,6 +50,7 @@ for file in "${FILES[@]}"; do
         else
             echo "Backup already exists, skipped: $backup"
         fi
+    fi
 
     # dotfiles側にファイルが存在すればリンク作成
     if [[ -f "$source" ]]; then
