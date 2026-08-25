@@ -7,11 +7,11 @@ BACKUP_DIR="$HOME/dotfiles_backup"
 # OS判別
 detect_os() {
     if [[ -f /etc/redhat-release ]]; then
-        echo "redhat"
+        echo "Redhat"
     elif [[ -f /etc/debian_version ]]; then
-        echo "debian"
+        echo "Debian"
     else
-        echo "unknown"
+        echo "Unknown"
     fi
 }
 
@@ -22,23 +22,10 @@ echo "Detected OS: $OS_TYPE"
 FILES=(
     ".bashrc"
     ".vimrc"
+    ".bash_profile"
     ".inputrc"
     ".gitconfig"
 )
-
-case "$OS_TYPE" in
-    redhat)
-        FILES+=(".bash_profile")
-        ;;
-    debian)
-        FILES+=(".profile")
-        ;;
-    *)
-        echo "Warning: Unknown OS. Adding both .bash_profile and .profile to check list."
-        FILES+=(".bash_profile" ".profile")
-        ;;
-esac
-
 
 # バックアップディレクトリ作成
 mkdir -p "$BACKUP_DIR"
@@ -49,14 +36,17 @@ for file in "${FILES[@]}"; do
     source="$DOTFILES_DIR/$file"
 
     # Debianの場合は .bash_profile を .profile に変更
-    if [[ "$file" == ".bash_profile" && "$OS_TYPE" == "debian" ]]; then
+    if [[ "$file" == ".bash_profile" && "$OS_TYPE" == "Debian" ]]; then
         target="$HOME/.profile"
+        backup="$BACKUP_DIR/.profile"
+    else
+        backup="$BACKUP_DIR/$file"
     fi
 
     # 既存ファイル（または既存リンク）が存在する場合はバックアップ
     if [[ -f "$target" || -L "$target" ]]; then
-        cp -a "$target" "$BACKUP_DIR/$file"
-        echo "Backed up: $file -> $BACKUP_DIR/$file"
+        cp -a "$target" "$backup"
+        echo "Backed up: $file -> $backup"
     fi
 
     # dotfiles側にファイルが存在すればリンク作成
