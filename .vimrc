@@ -9,6 +9,7 @@ set ignorecase
 set smartcase
 set hlsearch
 set incsearch
+set number
 nnoremap <Space> :nohlsearch<CR>
 set encoding=utf-8
 set fileencoding=utf-8
