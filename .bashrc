@@ -79,7 +79,7 @@ bak () {
     fi
 
     # 引数で指定したファイルをバックアップ
-    backup="${target}_$(date '+%Y%m%d').bak"
+    local backup="${target}_$(date '+%Y%m%d').bak"
     cp -a "$target" "$backup"
     echo "Success: $backup created."
 
