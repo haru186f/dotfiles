@@ -78,19 +78,8 @@ bak () {
         return 1
     fi
 
-    # バックアップファイル名の決定
-    local original="${target}.original"
-    local backup
-
-    if [[ ! -e "$original" ]]; then
-        # .original が存在しない場合は .original を作成
-        backup="$original"
-    else
-        # .original が存在する場合は _日付.bak を作成
-        backup="${target}_$(date '+%Y%m%d').bak"
-    fi
-
     # 引数で指定したファイルをバックアップ
+    backup="${target}_$(date '+%Y%m%d').bak"
     cp -a "$target" "$backup"
     echo "Success: $backup created."
 
