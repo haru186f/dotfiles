@@ -90,11 +90,14 @@ if [[ "$OS_TYPE" =~ WSL ]]; then
 
     # Windows 側にフォルダが存在する場合にリンク作成
     for folder in "${WIN_FOLDERS[@]}"; do
-        if [[ -d "$WIN_DIR/$folder" ]]; then
-            ln -sfn "$WIN_DIR/$folder" "$HOME/$folder"
-            echo "Linked: $WIN_DIR/$folder -> $HOME/$folder"
+        source="$WIN_DIR/$folder"
+        target="$HOME/$folder"
+
+        if [[ -d "$source" ]]; then
+            ln -sfn "$source" "$target"
+            echo "Linked: $source -> $target"
         else
-            echo "Warning: $WIN_DIR/$folder does not exist. Skipped."
+            echo "Warning: $source does not exist. Skipped."
         fi
     done
 fi
