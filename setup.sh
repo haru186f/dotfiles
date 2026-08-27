@@ -7,12 +7,12 @@ BACKUP_DIR="$HOME/dotfiles_backup"
 
 # OS判別
 detect_os() {
-    local os_name="Unknown"
-
     if [[ -f /etc/redhat-release ]]; then
         os_name="Redhat"
     elif [[ -f /etc/debian_version ]]; then
         os_name="Debian"
+    else
+        os_name="Unknown"
     fi
 
     if [[ -n "$WSL_DISTRO_NAME" ]]; then
