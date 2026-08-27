@@ -102,9 +102,11 @@ if [[ "$OS_TYPE" =~ WSL ]]; then
 fi
 
 # Vimカラースキーム用のディレクトリ作成とダウンロード
-mkdir -p "$HOME/.vim/colors"
-curl -fsSL -o "$HOME/.vim/colors/jellybeans.vim" \
+if [[ ! -f "$HOME/.vim/colors/jellybeans.vim" ]]; then
+    mkdir -p "$HOME/.vim/colors"
+    curl -fsSL -o "$HOME/.vim/colors/jellybeans.vim" \
     https://raw.githubusercontent.com/nanotech/jellybeans.vim/master/colors/jellybeans.vim
+fi
 
 echo "Setup completed successfully!"
 
