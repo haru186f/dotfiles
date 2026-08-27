@@ -92,7 +92,6 @@ if [[ "$OS_TYPE" =~ WSL ]]; then
     for folder in "${WIN_FOLDERS[@]}"; do
         source="$WIN_DIR/$folder"
         target="$HOME/$folder"
-
         if [[ -d "$source" ]]; then
             ln -sfn "$source" "$target"
             echo "Linked: $source -> $target"
