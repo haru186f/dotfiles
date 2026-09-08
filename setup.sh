@@ -32,6 +32,7 @@ FILES=(
     ".bash_profile"
     ".inputrc"
     ".gitconfig"
+    ".sqliterc"
 )
 
 # バックアップディレクトリ作成
