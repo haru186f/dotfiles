@@ -36,4 +36,5 @@ set cindent
 
 " その他
 set nobackup
+set noswapfile
 autocmd BufNewFile,BufRead * if &filetype == '' | set filetype=sh | endif
