@@ -16,7 +16,7 @@ noremap <F12> <ESC>:set number!<CR>
 set ignorecase
 set smartcase
 set hlsearch
-set noincsearch
+set incsearch
 set nowrapscan
 nnoremap <Space> :nohlsearch<CR>
 
