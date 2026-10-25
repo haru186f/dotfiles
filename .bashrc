@@ -22,6 +22,7 @@ alias cl='clear'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
+alias man='LC_ALL=ja_JP.UTF-8 man'
 
 # Git
 alias g='git'
