@@ -87,6 +87,25 @@ bak () {
     return 0
 }
 
+# ファイルやディレクトリをアプリケーションで開く
+open() {
+    if [ $# -eq 0 ]; then
+        # 引数がない場合は現在のディレクトリをエクスプローラーで開く
+        explorer.exe .
+    else
+        # 引数がある場合はWindowsのパスに変換して開く
+        for arg in "$@"; do
+            if [ -e "$arg" ]; then
+                cmd.exe /c start "" "$(wslpath -w "$arg")" 2>/dev/null
+            else
+                # URLなどの場合はそのまま渡す
+                cmd.exe /c start "" "$arg" 2>/dev/null
+            fi
+        done
+    fi
+}
+
+
 #==============================================================#
 #           Options                                            #
 #==============================================================#

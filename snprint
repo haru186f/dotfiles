@@ -1,0 +1,386 @@
+[4mPRINTF[24m(3)                                           Linux Programmer's Manual                                           [4mPRINTF[24m(3)
+
+[1m名前[0m
+       printf, fprintf, dprintf, sprintf, snprintf, vprintf, vfprintf, vdprintf, vsprintf, vsnprintf - 指定された書式に変換して出
+       力を行う
+
+[1m書式[0m
+       [1m#include <stdio.h>[0m
+
+       [1mint printf(const char *[4m[22mformat[24m[1m, ...);[0m
+       [1mint fprintf(FILE *[4m[22mstream[24m[1m, const char *[4m[22mformat[24m[1m, ...);[0m
+       [1mint dprintf(int [4m[22mfd[24m[1m, const char *[4m[22mformat[24m[1m, ...);[0m
+       [1mint sprintf(char *[4m[22mstr[24m[1m, const char *[4m[22mformat[24m[1m, ...);[0m
+       [1mint snprintf(char *[4m[22mstr[24m[1m, size_t [4m[22msize[24m[1m, const char *[4m[22mformat[24m[1m, ...);[0m
+
+       [1m#include <stdarg.h>[0m
+
+       [1mint vprintf(const char *[4m[22mformat[24m[1m, va_list [4m[22map[24m[1m);[0m
+       [1mint vfprintf(FILE *[4m[22mstream[24m[1m, const char *[4m[22mformat[24m[1m, va_list [4m[22map[24m[1m);[0m
+       [1mint vdprintf(int [4m[22mfd[24m[1m, const char *[4m[22mformat[24m[1m, va_list [4m[22map[24m[1m);[0m
+       [1mint vsprintf(char *[4m[22mstr[24m[1m, const char *[4m[22mformat[24m[1m, va_list [4m[22map[24m[1m);[0m
+       [1mint vsnprintf(char *[4m[22mstr[24m[1m, size_t [4m[22msize[24m[1m, const char *[4m[22mformat[24m[1m, va_list [4m[22map[24m[1m);[0m
+
+   glibc 向けの機能検査マクロの要件 ([1mfeature_test_macros[22m(7)  参照):
+
+       [1msnprintf[22m(), [1mvsnprintf[22m():
+           _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE ||
+               || /* Glibc versions <= 2.19: */ _BSD_SOURCE
+
+       [1mdprintf[22m(), [1mvdprintf[22m():
+           glibc 2.10 以降:
+               _POSIX_C_SOURCE >= 200809L
+           glibc 2.10 より前:
+               _GNU_SOURCE
+
+[1m説明[0m
+       [1mprintf[22m()   関数グループは、以下で述べるように、 [4mformat[24m に従って出力を生成するものである。 [1mprintf[22m()  と [1mvprintf[22m()  は出力を
+       [4mstdout[24m (標準出力ストリーム) に書き出す。 [1mfprintf[22m()  と [1mvfprintf[22m()  は出力を指定された出力 [4mstream[24m  に書き出す。  [1msprintf[22m(),
+       [1msnprintf[22m(), [1mvsprintf[22m(), [1mvsnprintf[22m()  は出力を文字列 [4mstr[24m に書き込む。
+
+       [1mdprintf[22m() 関数は [1mfprintf[22m(3) 関数と同じだが、 この関数は [4mstdio[24m ストリームではなくファイルディスクリプター [4mfd[24m に対して出力を
+       行う点が異なる。
+
+       [1msnprintf[22m()   と  [1mvsnprintf[22m()  は最大で [4msize[24m バイトを [4mstr[24m に書き込む ([4msize[24m には文字列を終端するヌルバイト ('\0') もを含まれ
+       る)。
+
+       [1mvprintf[22m(), [1mvfprintf[22m(), [1mvdprintf[22m(), [1mvsprintf[22m(), [1mvsnprintf[22m() の各関数はそれぞれ [1mprintf[22m(), [1mfprintf[22m(),  [1mdprintf[22m(),  [1msprintf[22m(),
+       [1msnprintf[22m(),  の各関数と等価であり、可変数引数の代わりに  [4mva_list[24m を引数として呼び出される点だけが異なる。 これらの関数では
+       [4mva_end[24m マクロは呼び出されない。 これらの関数は [4mva_arg[24m を呼び出すので、呼び出し後の [4map[24m の値は未定義である。 [1mstdarg[22m(3)  を参
+       照のこと。
+
+       これらの関数はすべて [4mformat[24m 文字列の制御に従って出力を書き出す。 [4mformat[24m 文字列は、これに続く引数 (または [1mstdarg[22m(3)  の可変
+       長引数機構を使ってアクセスできる引数)  をどのように変換して出力するかを指定する。
+
+       C99 と POSIX.1-2001 では、 [1msprintf[22m(), [1msnprintf[22m(), [1mvsprintf[22m(), [1mvsnprintf[22m()   の呼び出しで、範囲が重複するオブジェクト間でコ
+       ピーが発生する場合の 結果は不定であると規定されている (例えば、出力先の文字列と入力された 引数の一つが同じバッファーを参照
+       している場合などである)。 「注意」の節を参照。
+
+   [1mフォーマット文字列のフォーマット[0m
+       フォーマット文字列は文字の列で、  (もしあるなら) 初期シフト状態で始まり、初期シフト状態で終わる。 フォーマット用の文字列は
+       0 個以上の命令 (directives) によって構成される。 命令には、通常文字と変換指定 (conversion specifications) がある。  通常文
+       字は [1m% [22m以外の文字で、出力ストリームにそのままコピーされる。 変換指定は、それぞれが 0 個以上の引数を取る。 各変換指定は文字
+       [1m%  [22mで始まり、  [4m変換指定子[24m [4m(conversion[24m [4mspecifier)[24m で終わる。 [1m% [22mと変換指定子の間には、0 個以上の [4mフラグ[24m [4m、[24m 最小 [4mフィールド幅[0m
+       [4m、[24m [4m精度[24m [4m、[24m [4m長さ修飾子[24m を (この順序で) 置くことができる。
+
+       The arguments must correspond properly (after type promotion) with the conversion specifier.  By  default,  the  arguments
+       are  used  in the order given, where each '*' (see [4mField[24m [4mwidth[24m and [4mPrecision[24m below) and each conversion specifier asks for
+       the next argument (and it is an error if insufficiently many arguments are given).  One can also specify explicitly  which
+       argument  is taken, at each place where an argument is required, by writing "%m$" instead of '%' and "*m$" instead of '*',
+       where the decimal integer [4mm[24m denotes the position in the argument list of the desired argument, indexed  starting  from  1.
+       Thus,
+
+           printf("%*d", width, num);
+
+       と
+
+           printf("%2$*1$d", width, num);
+
+       は等価である。  二番目の書き方では同じ引数を繰り返し参照することができる。 C99 標準には、 Single UNIX Specification 由来の
+       '$' を使った書き方は含まれていない。 '$' を使ったスタイルを使うと、引数を取る変換及び幅と精度の引数を 全てこのスタイルで指
+       定しなければならないが、 引数を消費しない "%%" フォーマットと混ざっているかもしれない。 '$' で指定される引数の番号に空きが
+       あってはならない。 例えば、もし引数 1 と 3 が指定されると、引数  2  もフォーマット文字列のどこかで  指定されなければならな
+       い。
+
+       数値変換には小数点や   1000   単位の区切り文字を使うものもある。   実際にどの文字を使うかはロケールの   [1mLC_NUMERIC  [22mによる
+       ([1msetlocale[22m(3) 参照)。 POSIX ロケールでは小数点に '.' を用い、 区切り文字は使わない。 従って、
+
+           printf("%'.2f", 1234567.89);
+
+       は、 POSIX ロケールでは "1234567.89" 、 nl_NL ロケールでは "1234567,89"、 da_DK ロケールでは "1.234.567,89" となる。
+
+   [1mフラグ文字[0m
+       % 文字の後ろには 0 個以上のフラグ文字が続く。
+
+       [1m#      [22m値は「別の形式」に変換される。 [1mo [22m変換の場合、(先頭文字が 0 になっていない場合に先頭に 0 を追加することで)  出力文字
+              列の最初の文字を 0 にする。 [1mx [22mと [1mX [22m変換の場合、数値が 0 でないときには文字列 "0x" ([1mX [22m変換の場合には "0X")  が前に付
+              与される。  [1ma[22m, [1mA[22m, [1me[22m, [1mE[22m, [1mf[22m, [1mF[22m, [1mg[22m, [1mG [22m変換では、 小数点に続く数字がなくても、 出力には常に小数点が含まれる (通常は、小
+              数点の後に数字が続く場合にのみ、 小数点が表示される)。 [1mg [22mと [1mG  [22m変換の場合、他の変換とは異なり、末尾のゼロが変換結果
+              から削除されない。 その他の変換では、結果は未定義である。
+
+       [1m0      [22m値をゼロで埋める。  [1md[22m, [1mi[22m, [1mo[22m, [1mu[22m, [1mx[22m, [1mX[22m, [1ma[22m, [1mA[22m, [1me[22m, [1mE[22m, [1mf[22m, [1mF[22m, [1mg[22m, [1mG [22m変換では、変換した値の左側を空白文字の代わりにゼロで埋
+              める。 [1m0 [22mと [1m- [22mが両方とも指定された場合は、 [1m0 [22mフラグは無視される。 精度が数値変換 ([1md[22m, [1mi[22m, [1mo[22m, [1mu[22m, [1mx[22m, [1mX[22m)  と同時に指定さ
+              れた場合には、 [1m0 [22mフラグは無視される。 その他の変換では、動作は未定義である。
+
+       [1m-      [22m変換値をフィールド境界で左揃えにする (デフォルトは右揃えである)。 変換された値は 左側ではなく右側を空白文字やゼロで
+              埋められる。 [1m- [22mと [1m0 [22mの両方が指定された場合には、 [1m- [22mが優先される。
+
+       [1m' '    [22m(1個の半角スペース)  符号付き変換で生成された正の数字の前に空白 (または空文字列) が置かれる。
+
+       [1m+      [22m符号付き変換によって出力される数字の前に、常に符号 (+ か -) が置かれる。 デフォルトでは、符号は負の数字の場合のみ付
+              与される。 [1m+ [22mと半角スペースの 両方が使われている場合には、 [1m+ [22mが優先される。
+
+       上記の 5 つのフラグは C99 標準で定義されている。 Single UNIX Specified では、さらにもう一つフラグ文字が規定されている。
+
+       [1m'      [22m10進数変換   ([1mi[22m,   [1md[22m,   [1mu[22m,  [1mf[22m,  [1mF[22m,  [1mg[22m,  [1mG[22m)   において、ロケール情報に指定があれば  1000  単位の区切り文字を出力する
+              ([1msetlocale[22m(3) 参照)。 [1mgcc[22m(1) の多くのバージョンは、このオプションを解釈することができず、  警告を出力することに注意
+              せよ。 ([4m%'F[24m は SUSv2 には含まれていなかったが、 SUSv3 で追加された。
+
+       glibc 2.2 では、さらに一つフラグ文字が追加されている。
+
+       [1mI      [22m10進整数変換  ([1mi[22m, [1md[22m, [1mu[22m)  において、ロケールの代替出力数字があれば、それを用いて出力する。 例えば、 glibc 2.2.3 以降
+              では、ペルシア ("fa_IR") ロケールで アラビア数字 (Arabic-Indic digits) を出力できる。
+
+   [1mフィールド幅[0m
+       最小のフィールド幅を指定する 10進数の数値文字列 (文字列の最初の文字は ゼロ以外)。本項目はオプションである。 変換された値の
+       文字数がフィールド長よりも少ない場合、 フィールドの左側をスペースで埋める (左揃えのフラグがある場合は右側を埋める)。  10進
+       数の文字列の代わりに  "*" や "*m$" ([4mm[24m は 10進整数) を書くこともできる。 "*" と "*m$" はそれぞれ、次の引数と [4mm[24m 番目の引数を
+       フィールド幅として 使うことを指定する (これらの引数は [4mint[24m 型でなければならない)。 フィールド幅に負の数が指定された場合は、
+       '-' フラグと正の数のフィールド幅として扱われる。  フィールド幅が小さかったり指定がなかったりしても、フィールドが切り詰めら
+       れる ことはない。もし変換結果がフィールド幅よりも広かった場合、 フィールドは変換結果が入る幅に広げられる。
+
+   [1m精度[0m
+       オプションである精度は、ピリオド  ('.') とそれに続く10進数という 形式で指定する (10進数はオプション) 。 10進数の文字列の代
+       わりに "*" や "*m$" ([4mm[24m は 10 進整数)を書くこともできる。 "*" と "*m$" はそれぞれ、次の引数と [4mm[24m 番目の引数を精度として 使う
+       ことを指定する (これらの引数は [4mint[24m 型でなければならない)。 精度として '.' だけが指定された場合、  精度はゼロとみなされる。
+       精度が負の数だった場合、  精度は指定されなかったものとみなされる。 [1md[22m, [1mi[22m, [1mo[22m, [1mu[22m, [1mx[22m, [1mX [22m変換では、表示される最小の桁数を指定す
+       る。 [1ma[22m, [1mA[22m, [1me[22m, [1mE[22m, [1mf[22m, [1mF [22m変換では、小数点以下に表示される数字の桁数を指定する。 [1mg [22mと  [1mG  [22m変換では、有効数字の最大桁数を指定す
+       る。 [1ms [22mと [1mS [22m変換では、文字列から出力される最大文字数を指定する。
+
+   [1m長さ修飾子[0m
+       「整数変換」とは、 [1md[22m, [1mi[22m, [1mo[22m, [1mu[22m, [1mx[22m, [1mX [22m変換のことである。
+
+       [1mhh     [22m整数変換に対応する引数が  [4msigned[24m [4mchar[24m か [4munsigned[24m [4mchar[24m で、 [1mn [22m変換に対応する引数が [4msigned[24m [4mchar[24m へのポインターである
+              ことを示す。
+
+       [1mh      [22m整数変換に対応する引数が [4mshort[24m か [4munsigned[24m [4mshort[24m で、 [1mn [22m変換に対応する引数が [4mshort[24m へのポインターであることを示す。
+
+       [1ml      [22m各変換に対応する引数が、 整数変換では [4mlong[24m か [4munsigned[24m [4mlong[24m、 [1mn [22m変換では [4mlong[24m へのポインター、 [1mc [22m変換では  [4mwint_t[24m、
+              [1ms [22m変換では [4mwchar_t[24m へのポインターであることを示す。
+
+       [1mll [22m(エルエル)
+              整数変換に対応する引数が [4mlong[24m [4mlong[24m か [4munsigned[24m [4mlong[24m [4mlong[24m で、 [1mn [22m変換に対応する引数が [4mlong[24m [4mlong[24m へのポインターである
+              ことを示す。
+
+       [1mq      [22mA synonym for [1mll[22m.  This is a nonstandard extension, derived from BSD; avoid its use in new code.
+
+       [1mL      a[22m,  [1mA[22m,  [1me[22m,  [1mE[22m,  [1mf[22m, [1mF[22m, [1mg[22m, [1mG [22m変換に対応する引数が [4mlong[24m [4mdouble[24m であることを示す。 (C99 では %LF を使うことを認めている
+              が、SUSv2 では認められていない。)
+
+       [1mj      [22m整数変換に対応する引数が [4mintmax_t[24m か [4muintmax_t[24m で、 [1mn  [22m変換に対応する引数が  [4mintmax_t[24m  へのポインターであることを示
+              す。
+
+       [1mz      [22m整数変換に対応する引数が [4msize_t[24m か [4mssize_t[24m で、 [1mn [22m変換に対応する引数が [4msize_t[24m へのポインターであることを示す。
+
+       [1mZ      [22mA nonstandard synonym for [1mz [22mthat predates the appearance of [1mz[22m.  Do not use in new code.
+
+       [1mt      [22m整数変換に対応する引数が [4mptrdiff_t[24m で、 [1mn [22m変換に対応する引数が [4mptrdiff_t[24m へのポインターであることを示す。
+
+       SUSv3  specifies  all  of  the  above, except for those modifiers explicitly noted as being nonstandard extensions.  SUSv2
+       specified only the length modifiers [1mh [22m(in [1mhd[22m, [1mhi[22m, [1mho[22m, [1mhx[22m, [1mhX[22m, [1mhn[22m)  and [1ml [22m(in [1mld[22m, [1mli[22m, [1mlo[22m, [1mlx[22m, [1mlX[22m, [1mln[22m, [1mlc[22m, [1mls[22m)   and  [1mL  [22m(in
+       [1mLe[22m, [1mLE[22m, [1mLf[22m, [1mLg[22m, [1mLG[22m).
+
+       As  a  nonstandard extension, the GNU implementations treats [1mll [22mand [1mL [22mas synonyms, so that one can, for example, write [1mllg[0m
+       (as a synonym for the standards-compliant [1mLg[22m)  and [1mLd [22m(as a synonym for the  standards  compliant  [1mlld[22m).   Such  usage  is
+       nonportable.
+
+   [1m変換指定子[0m
+       適用される変換の型を指定する文字。 変換指定子とその意味は以下の通りである。
+
+       [1md[22m, [1mi   [4m[22mint[24m  引数を符号付き 10 進表記に変換する。 精度指定があれば、精度で指定した桁数は必ず出力される。変換後の値が 指定さ
+              れた桁数に足りない場合は、左側が 0 で埋められる。 デフォルトの精度は 1 である。 0  を表示しようとした時に、明示的に
+              精度として 0 が指定されていると、 出力は空文字列となる。
+
+       [1mo[22m, [1mu[22m, [1mx[22m, [1mX[0m
+              [4munsigned[24m [4mint[24m 引数を、 符号なし8進数 ([1mo[22m), 符号なし10進数 ([1mu[22m), 符号なし16進数 ([1mx [22mと [1mX[22m) に変換する。 [1mx [22m変換では [1mabcdef[0m
+              が使用され、 [1mX [22m変換では [1mABCDEF [22mが使用される。 精度指定があれば、精度で指定した桁数は必ず出力される。変換後の値が 指
+              定された桁数に足りない場合は、左側が 0 で埋められる。
+
+       [1me[22m, [1mE   [22mThe  [4mdouble[24m  argument is rounded and converted in the style [-]d[1m.[22mddd[1me[22m±dd where there is one digit (which is nonzero
+              if the argument is nonzero)  before the decimal-point character and the number of digits after it is equal  to  the
+              precision;  if  the  precision  is  missing, it is taken as 6; if the precision is zero, no decimal-point character
+              appears.  An [1mE [22mconversion uses the letter [1mE [22m(rather than [1me[22m)   to  introduce  the  exponent.   The  exponent  always
+              contains at least two digits; if the value is zero, the exponent is 00.
+
+       [1mf[22m, [1mF   [4m[22mdouble[24m 引数を丸めて [-]ddd[1m.[22mddd の形の10進表現に変換する。 小数点の後の桁数は、精度で指定された値となる。 精度が指定
+              されていない場合には  6 として扱われる。 精度として明示的に 0 が指定されたときには、小数点以下は表示されない。 小数
+              点を表示する際には、小数点の前に少なくとも一桁は数字が表示される。
+
+              (SUSv2 では、[1mF [22mは規定されておらず、無限や NaN に関する文字列表現を行ってもよいことになっている。 SUSv3 では [1mF  [22mの規
+              定が追加された。  C99  標準では、[1mf [22m変換では、無限は "[-]inf" か "[-]infinity" と表示し、 NaN は文字列の先頭に `nan'
+              をつけて表示するように規定されている。 [1mF [22m変換の場合は "[-]INF", "[-]INFINITY", "NAN" と表示される。)
+
+       [1mg[22m, [1mG   [4m[22mdouble[24m 引数を [1mf [22mか [1me [22m([1mG [22m変換の場合は [1mF [22mか [1mE[22m)  の形式に変換する。 精度は表示する桁数を指定する。  精度が指定されない
+              場合は、6桁とみなされる。 精度が 0 の場合は、1桁とみなされる。 変換される値の指数が、 -4 より小さいか、精度以上の場
+              合に、  [1me [22m形式が使用される。 変換された結果の小数部分の末尾の 0 は削除される。小数点が表示されるのは、 小数点以下に
+              数字が少なくとも一つある場合にだけである。
+
+       [1ma[22m, [1mA   [22m(C99; not in SUSv2, but added in SUSv3)  For [1ma [22mconversion, the [4mdouble[24m argument is converted to hexadecimal notation
+              (using the letters abcdef)  in the style [-][1m0x[22mh[1m.[22mhhhh[1mp[22m±d; for [1mA [22mconversion the prefix [1m0X[22m, the  letters  ABCDEF,  and
+              the  exponent  separator  [1mP  [22mis  used.   There is one hexadecimal digit before the decimal point, and the number of
+              digits after it is equal to the precision.  The default precision suffices for an exact representation of the value
+              if an exact representation in base 2 exists and otherwise is sufficiently  large  to  distinguish  values  of  type
+              [4mdouble[24m.   The  digit  before  the decimal point is unspecified for nonnormalized numbers, and nonzero but otherwise
+              unspecified for normalized numbers.  The exponent always contains at least one digit; if the  value  is  zero,  the
+              exponent is 0.
+
+       [1mc      l  [22m修飾子がなければ、  [4mint[24m  引数を  [4munsigned[24m [4mchar[24m に変換して、その結果に対応する文字を出力する。 [1ml [22m修飾子があれば、
+              [4mwint_t[24m (ワイド文字) 引数を、 [1mwcrtomb[22m(3) 関数を初期シフト状態で呼び出してマルチバイト文字列に変換し、 変換されたマル
+              チバイト文字列を出力する。
+
+       [1ms      l [22m修飾子がない場合、 引数は [4mconst[24m [4mchar[24m [4m*[24m 型で文字型の配列へのポインター (文字列へのポインター) であることが  期待さ
+              れている。配列中の文字は、終端の  ヌルバイト ('\0')  が出てくるまで出力される (終端文字は出力されない)。 精度が指定
+              されていると、指定された字数以上は出力されない。 精度が指定された場合には、終端バイトが存在する必要はない。  精度が
+              指定されていなかったり、精度の値が配列の大きさより大きい場合には、   配列は終端のヌルバイトを含んでいなければならな
+              い。
+
+              [1ml [22m修飾子が指定されている場合、 引数は  [4mconst[24m  [4mwchar_t[24m [4m*[24m  型でワイド文字の配列へのポインターであることが期待されてい
+              る。 配列中のワイド文字は (1文字毎に [1mwcrtomb[22m(3)  を呼び出して) マルチバイト文字に変換される (最初のワイド文字の変換
+              の前に  [1mwcrtomb[22m()  のシフト状態を初期状態に戻してから変換は行われる)。 マルチバイト文字への変換は、文字列を終端する
+              ヌルワイド文字が 出てくるまで行われ、終端ヌルワイド文字も含めて変換される。  結果のマルチバイト文字列は、終端のヌル
+              バイトが出てくるまで 出力される (終端のヌルバイトは出力されない)。 精度が指定された場合、指定されたバイト数以上には
+              出力されない。    但し、マルチバイト文字の一部分だけが出力されることはない。   精度は「バイト」数を指定するものであ
+              り、「ワイド文字」数や 「画面での位置」を指定するものではないことに注意。  精度が指定されていて、さらに出力が配列の
+              末尾に達する前に出力バイト数が  精度の値を超える場合だけは、配列はヌルワイド文字で終端されていなくてもよい。 それ以
+              外の場合は、必ず配列はヌルワイド文字で終端されていなければならない。
+
+       [1mC      [22m(C99, C11 にはないが SUSv2, SUSv3, SUSv4 にはある)  [1mlc [22mと同じ。使ってはならない。
+
+       [1mS      [22m(C99, C11 にはないが SUSv2, SUSv3, SUSv4 にはある)  [1mls [22mと同じ。使ってはならない。
+
+       [1mp      [4m[22mvoid[24m [4m*[24m ポインター引数を ([1m%#x [22mや [1m%#lx [22mのような) 16 進数で出力する。
+
+       [1mn      [22mThe number of characters written so far is stored into the integer pointed to by the corresponding argument.   That
+              argument  shall  be an [4mint[24m [4m*[24m, or variant whose size matches the (optionally)  supplied integer length modifier.  No
+              argument is converted.  (This specifier is not supported by the bionic C library.)  The behavior  is  undefined  if
+              the conversion specification includes any flags, a field width, or a precision.
+
+       [1mm      [22m(glibc での拡張; uClibc と musl で対応)  [4mstrerror(errno)[24m の出力を表示する。引数は必要ない。
+
+       [1m%      [22m'%' 文字を出力する。変換される引数は無い。 変換指定全体を書くと "%%" となる。
+
+[1m返り値[0m
+       成功時には、上記の関数は書き込まれた文字数を返す (文字列の最後を示すために使用するヌルバイトは数に含まれない)。
+
+       [1msnprintf[22m()   と [1mvsnprintf[22m()  は、 [4msize[24m バイトを越える文字数を書き込まない ([4msize[24m には文字列を終端するヌルバイト ('\0') も含
+       まれる)。 この制限によって出力が切り詰められた場合には、 もし十分なスペースがあれば書き込まれたであろう文字の個数  (文字列
+       を終端するヌルバイトを除く)  を返す。 従って、返り値が [4msize[24m 以上だった場合、出力が切り詰められたことを意味する (後述の注意
+       も参照のこと)。
+
+       エラーが発生した場合は、負の数を返す。
+
+[1m属性[0m
+       この節で使用されている用語の説明については、 [1mattributes[22m(7) を参照。
+       ┌─────────────────────────┬───────────────┬────────────────┐
+       │ [1mインターフェース        [22m│ [1m属性          [22m│ [1m値             [22m│
+       ├─────────────────────────┼───────────────┼────────────────┤
+       │ [1mprintf[22m(), [1mfprintf[22m(),    │ Thread safety │ MT-Safe locale │
+       │ [1msprintf[22m(), [1msnprintf[22m(),  │               │                │
+       │ [1mvprintf[22m(), [1mvfprintf[22m(),  │               │                │
+       │ [1mvsprintf[22m(), [1mvsnprintf[22m() │               │                │
+       └─────────────────────────┴───────────────┴────────────────┘
+
+[1m準拠[0m
+       [1mfprintf[22m(), [1mprintf[22m(), [1msprintf[22m(), [1mvprintf[22m(), [1mvfprintf[22m(), [1mvsprintf[22m(): POSIX.1-2001, POSIX.1-2008, C89, C99.
+
+       [1msnprintf[22m(), [1mvsnprintf[22m(): POSIX.1-2001, POSIX.1-2008, C99.
+
+       [1mdprintf[22m()  と [1mvdprintf[22m()  は、どちらも元は GNU による拡張であったが、 POSIX.1-2008 で標準化された。
+
+       [1msnprintf[22m()  の返り値を見ると、 SUSv2 と C99 標準は互いに矛盾している。 SUSv2 では、 [1msnprintf[22m() が [4msize[24m=0  で呼び出された場
+       合、 1 未満の値を何か返り値とするように規定している。 一方 C99 では、このような場合 [4mstr[24m を NULL とし、返り値として (通常通
+       り)   出力バッファーが十分な大きさが   あった場合に出力されるであろう文字数を返す。  POSIX.1-2001  やそれ以降では  C99  の
+       [1msnprintf[22m() の規定にあわせたものとなっている。
+
+       glibc 2.1 では、長さ修飾子 [1mhh[22m, [1mj[22m, [1mt[22m, [1mz [22mと変換文字 [1ma[22m, [1mA [22mが追加された。
+
+       glibc 2.2 では、 C99 で規定された意味での変換文字 [1mF [22mと フラグ文字 [1mI [22mが追加された。
+
+[1m注意[0m
+       テキストを [4mbuf[24m に追加するのに、軽率にも次のようなコードを使っているプログラムがある。
+
+           sprintf(buf, "%s some further text", buf);
+
+       しかしながら、標準規格では、 [1msprintf[22m(), [1msnprintf[22m(), [1mvsprintf[22m(),  [1mvsnprintf[22m()  の呼び出しにおいて、コピー元とコピー先のバッ
+       ファーが重なっていた場合の 結果は不定である、と明記されている。 使用する [1mgcc[22m(1) のバージョンや指定したコンパイラのオプショ
+       ン次第では、 上記のような呼び出しで、期待した結果が得られ「ない」ことがある。
+
+       glibc  の  [1msnprintf[22m()   と  [1mvsnprintf[22m()  の実装は、バージョン 2.1 以降は C99 標準に準拠しており、 上記の通りの動作をする。
+       glibc 2.0.6 までは、出力が切り詰められた場合は -1 を返す。
+
+[1mバグ[0m
+       [1msprintf[22m()  と [1mvsprintf[22m()  は勝手に十分に長い文字列領域があると仮定するので、呼び出し側は  実際の領域からあふれないように注
+       意しなければならない。 しかし、これを保証することが不可能な場合が多い。 生成される文字列の長さはロケール依存であり、予測が
+       難しいことに注意。 代わりに [1msnprintf[22m()  と [1mvsnprintf[22m() (または [1masprintf[22m(3)  と [1mvasprintf[22m(3))  を使うこと。
+
+       [1mprintf([4m[22mfoo[24m[1m);  [22mのようなコードはしばしばバグを引き起こす。 なぜなら [4mfoo[24m に % 文字が含まれてるかもしれないからである。 [4mfoo[24m が
+       信頼できないユーザー入力から作られている場合には、 その中に [1m%n [22mが含まれていることがあり、 [1mprintf[22m()  呼び出し時にメモリーへ
+       の書き込みが起こり、 セキュリティーホールを作ることになるかもしれない。
+
+[1m例[0m
+       [4mPi[24m を 5 桁で出力する。
+
+           #include <math.h>
+           #include <stdio.h>
+           fprintf(stdout, "pi = %.5f\n", 4 * atan(1.0));
+
+       日付と時間を "Sunday, July 3, 10:02" の形式で出力する。 ([4mweekday[24m と [4mmonth[24m は文字列へのポインターである)
+
+           #include <stdio.h>
+           fprintf(stdout, "%s, %s %d, %.2d:%.2d\n",
+                weekday, month, day, hour, min);
+
+       日 - 月 - 年 の順序で表示を行う国も多い。 従って、国際版では書式で指定された順番で 引数を表示できなければならない。
+
+           #include <stdio.h>
+           fprintf(stdout, format,
+                weekday, month, day, hour, min);
+
+       [4mformat[24m はロケールに依存しており、引数の順番を変えることもできる。 [4mformat[24m が
+
+           "%1$s, %3$d. %2$s, %4$d:%5$.2d\n"
+
+       であれば、 "Sonntag, 3. Juli, 10:02" という結果になる。
+
+       十分に大きな文字列領域を確保して、そこにメッセージを格納するには (glibc 2.0 と glibc 2.1 の両方で正しく動作するコード):
+
+       #include <stdio.h>
+       #include <stdlib.h>
+       #include <stdarg.h>
+
+       char *
+       make_message(const char *fmt, ...)
+       {
+           int n = 0;
+           size_t size = 0;
+           char *p = NULL;
+           va_list ap;
+
+           /* Determine required size */
+
+           va_start(ap, fmt);
+           n = vsnprintf(p, size, fmt, ap);
+           va_end(ap);
+
+           if (n < 0)
+               return NULL;
+
+           /* One extra byte for '\0' */
+
+           size = (size_t) n + 1;
+           p = malloc(size);
+           if (p == NULL)
+               return NULL;
+
+           va_start(ap, fmt);
+           n = vsnprintf(p, size, fmt, ap);
+           va_end(ap);
+
+           if (n < 0) {
+               free(p);
+               return NULL;
+           }
+
+           return p;
+       }
+
+       バージョン 2.0.6 より前の glibc で切り詰めが起こった場合、切り詰めは適切に処理されず、エラーとして扱われる。
+
+[1m関連項目[0m
+       [1mprintf[22m(1), [1masprintf[22m(3), [1mputs[22m(3), [1mscanf[22m(3), [1msetlocale[22m(3), [1mstrfromd[22m(3), [1mwcrtomb[22m(3), [1mwprintf[22m(3), [1mlocale[22m(5)
+
+[1mこの文書について[0m
+       この man ページは Linux  [4mman-pages[24m  プロジェクトのリリース  5.10  の一部である。プロジェクトの説明とバグ報告に関する情報は
+       https://www.kernel.org/doc/man-pages/ に書かれている。
+
+GNU                                                         2020-11-01                                                  [4mPRINTF[24m(3)
