@@ -18,3 +18,4 @@ export HISTSIZE=50000
 export HISTFILESIZE=100000
 export EDITOR=vim
 export VISUAL=vim
+export SOFFICE_PATH=/usr/bin/soffice
