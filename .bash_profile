@@ -19,3 +19,4 @@ export HISTFILESIZE=100000
 export EDITOR=vim
 export VISUAL=vim
 export SOFFICE_PATH=/usr/bin/soffice
+export PATH=/usr/local/texlive/2026/bin/x86_64-linux:$PATH
