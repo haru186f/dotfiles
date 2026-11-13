@@ -128,6 +128,10 @@ shopt -s nocaseglob
 shopt -s checkwinsize
 shopt -u sourcepath
 
+#==============================================================#
+#           Others                                             #
+#==============================================================#
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/home/haru/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
