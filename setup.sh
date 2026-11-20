@@ -109,5 +109,12 @@ if [[ ! -e "$HOME/.vim/colors/jellybeans.vim" ]]; then
     https://raw.githubusercontent.com/nanotech/jellybeans.vim/master/colors/jellybeans.vim
 fi
 
+# dotfilesの適用
+if [[ "$OS_FILE" ~= "Redhat" ]]; then
+    . $HOME/.bash_profile
+elif [[ "$OS_TYPE" ~= "Debian" ]]; then
+    . $HOME/.profile
+fi
+
 echo "Setup completed successfully!"
 

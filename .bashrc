@@ -22,7 +22,8 @@ alias cl='clear'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
-alias man='LC_ALL=ja_JP.UTF-8 man'
+alias man='env LANG=ja_JP.UTF-8 man'
+alias eman='env LANG=C man'
 
 # Git
 alias g='git'
