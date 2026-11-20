@@ -110,9 +110,9 @@ if [[ ! -e "$HOME/.vim/colors/jellybeans.vim" ]]; then
 fi
 
 # dotfilesの適用
-if [[ "$OS_FILE" =~ "Redhat" ]]; then
+if [[ "$OS_TYPE" =~ Redhat ]]; then
     . $HOME/.bash_profile
-elif [[ "$OS_TYPE" =~ "Debian" ]]; then
+elif [[ "$OS_TYPE" =~ Debian ]]; then
     . $HOME/.profile
 fi
 
